@@ -23,9 +23,15 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.241-b07, mixed mode)
 
 项目实现:
 1.创建项目，配置项目的文本字符集为utf-8，导入相应的Spring，SpringMVC，Hibernate的包
+
 2.编写POJO层，写student数据库表的pojo类，然后编写student的Hibernate映射文件
+
 3.编写DAO层，先写IStudentDAO接口，然后写StudentDAO实现IStudentDAO接口，导入HibernateTemplate属性，后面用来setter注入
+
 4.编写Service层，先写StudentService接口，然后写StudentService接口的实现类StudentServiceImpl，导入StudentDAO属性，后面用来setter注入。
+
 5.在WEB-INF编写ApplicationContext.xml,配置好相应的数据源DataSource，Hibernate的SessionFactory、事务管理器transactionManager，HibernateTemplate，并配置好相应的bean和property注入，以及相应的声明式事务，同时在另一个springmvc-servlet.xml中配置好相应的注解扫描和视图解析器ResourceviewResolver
+
 6.编写Controller控制器层，引入@Controller，@RequestMapping等注解，供bean初始化时的扫描，编写好相应的业务。
+
 7.Tomcat部署项目，启动Tomcat，在浏览器输入相关链接，进入主页面，执行相关登录，注册，增删改查等操作。
