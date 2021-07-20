@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util.xsd
+    ">
+	<!-- 数据源设置 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/student" />
+		<property name="username" value="root" />
+		<property name="password" value="a3823783" />
+	</bean>
+	
+	<!-- hibernate SessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置 hibernate 映射文件的位置及名称, 可以使用通配符 -->
+		<property name="mappingLocations" value="classpath:com/pojo/*.hbm.xml"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- HibernateTemplate -->
+	<bean id="template" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- DAO -->
+	<bean id="studentDAO" class="com.dao.StudentDAO">
+		<property name="template" ref="template" />
+	</bean>
+	<!-- service -->
+	<bean id="studentService" class="com.service.StudentServiceImpl">
+	    <property name="dao" ref="studentDAO"/>
+	</bean>
+	<!-- 事务管理器HibernateTransactionManager -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" >
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 声明式事务，代理对象TransactionProxyFactoryBean -->
+	<bean id="helloProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" >
+		<property name="target" ref="studentService" />                   <!-- 对象 -->
+		<property name="transactionManager" ref="transactionManager" />     <!-- 事务管理器 -->
+		<property name="transactionAttributes" >                            <!-- 事务属性设置 -->
+			<props>
+				<prop key="regester">PROPAGATION_REQUIRED</prop>
+				<prop key="update">PROPAGATION_REQUIRED</prop>
+				<prop key="delete">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.pojo">
+	<class name="Student" table="springuser">
+		<!-- 主键映射 -->
+		<id name="user_id" type="string" column="user_id">
+		</id>
+		<!-- 属性映射 -->
+		<property name="real_name" type="string" column="real_name" />
+		<property name="password" type="string" column="password" />
+		<property name="sex" type="string" column="sex" />
+		
+	</class>
+</hibernate-mapping>
+
